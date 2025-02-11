@@ -1,62 +1,101 @@
 import java.util.Scanner;
+import java.util.InputMismatchException;
 
-
-public class Calc {
-    public static int add(int a, int b){
+class Calculator{
+    public static double add(double a, double b){
         return a+b;
     }
-    public static int sub(int a, int b){
+    public static double sub(double a, double b){
         return a-b;
     }
-    public static int mul(int a, int b){
+    public static double mul(double a, double b){
         return a*b;
     }
-    public static double div(int a, int b){
-        try{
-            if (b==0) throw new ArithmeticException("Zero Division Error!");
+    public static double div(double a, double b) {
+        if (b == 0) {
+            System.out.println("Cannot be divided bt ZERO!!!");
+            return Double.NaN;
         }
-        catch (ArithmeticException e){
-            System.out.println(e);
+        return (double) a / b;
+    }
+}
+
+public class Calc {
+    public static Scanner ip= new Scanner(System.in);
+
+
+
+    public static boolean continueLoop(Scanner ip){
+        while(true){
+            System.out.print("Continue?[y/n]:");
+            String l=ip.next();
+            if (l.equalsIgnoreCase("y")) {
+                System.out.println();
+                return true;
+            } else if(l.equalsIgnoreCase("n")) {
+                System.out.println("Bye bye!");
+                return false;
+            }else{
+                System.out.println("Please enter either y/n!");
+            }
         }
-        return (double)a/b;
     }
 
-    public static void main(String[] args){
-        Scanner ip= new Scanner(System.in);
-        while(true) {
-            System.out.print("Enter value for x:");
-            int x = ip.nextInt();
-            System.out.print("Enter value for y:");
-            int y = ip.nextInt();
+    public static String getValidOp(Scanner ip){
+        while(true){
             System.out.print("Enter operation[+,-,*,/]:");
             String op = ip.next();
+            if(op.equals("+")||op.equals("-")||op.equals("*")||op.equals("/")){
+                return op;
+            }
+            else{
+                System.out.println("Invalid Operator!");
+            }
+        }
+    }
+
+    public static double getValidNo(String prompt){
+        while(true){
+            try{
+                System.out.print(prompt);
+                return ip.nextDouble();
+            }catch (InputMismatchException e){
+                System.out.println("Invalid input! Enter a number!!");
+                ip.next();
+            }
+        }
+    }
+
+
+    public static void main(String[] args){
+        boolean continueCalc = true;
+        while(continueCalc) {
+            double x=getValidNo("Enter value for x:");
+            double y=getValidNo("Enter value for y:");
+
+            String op = getValidOp(ip);
             double result;
             switch (op) {
                 case "+":
-                    result = Calc.add(x, y);
-                    System.out.printf("Sum : %d\n", (int)result);
+                    result = Calculator.add(x, y);
+                    System.out.printf("Sum :  %.2f\n", result);
                     break;
                 case "-":
-                    result = Calc.sub(x, y);
-                    System.out.printf("Difference : %d\n", (int)result);
+                    result = Calculator.sub(x, y);
+                    System.out.printf("Difference :  %.2f\n", result);
                     break;
                 case "*":
-                    result = Calc.mul(x, y);
-                    System.out.printf("Product : %d\n", (int)result);
+                    result = Calculator.mul(x, y);
+                    System.out.printf("Product : %.2f\n", result);
                     break;
                 case "/":
-                    result = Calc.div(x, y);
-                    System.out.printf("Reminder : %.2f\n", result);
+                    result = Calculator.div(x, y);
+                    System.out.printf("Quotient : %.2f\n", result);
                     break;
                 default:
                     System.out.println("Invalid Operator!");
             }
-            System.out.print("Continue?[y/n]:");
-            String l=ip.next();
-            if (l.equalsIgnoreCase("n")) {
-                System.out.println("Bye bye!");
-                break;
-            }
+            continueCalc=continueLoop(ip);
         }
         ip.close();
     }
