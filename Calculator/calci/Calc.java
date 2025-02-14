@@ -16,7 +16,7 @@ class Calculator{
             System.out.println("Cannot be divided bt ZERO!!!");
             return Double.NaN;
         }
-        return (double) a / b;
+        return a / b;
     }
 }
 
